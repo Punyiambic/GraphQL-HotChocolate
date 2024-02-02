@@ -9,6 +9,7 @@ using HotChocolate.Types.Pagination;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using Product.QL.Interceptors;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,8 +44,8 @@ builder.Services
     .AddProjections()
     .AddFiltering()
     .AddSorting()
-    .AddTypeExtension<BrandType>()
-    .AddTypeExtension<LobTeamType>()
+    .AddType<BrandType>()
+    .AddType<LobTeamType>()
     .SetPagingOptions(new PagingOptions
     {
         DefaultPageSize = 50,
@@ -52,7 +53,7 @@ builder.Services
         IncludeTotalCount = true,
         AllowBackwardPagination = true
     })
-    //.TryAddTypeInterceptor<FilterCollectionTypeInterceptor>()
+    .TryAddTypeInterceptor<FilterCollectionTypeInterceptor>()
     ;
 
 builder.Services.AddCors(options =>
